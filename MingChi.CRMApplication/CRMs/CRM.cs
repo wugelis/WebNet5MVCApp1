@@ -5,24 +5,24 @@ using System.Collections;
 using System.Linq;
 using MingChi.CRMApplication.CRMs.ViewModels;
 using MingChi.Infrastructure.Configuration.CRMs;
+using MingChi.Domain.CRMs;
 
 namespace MingChi.CRMApplication.CRMs
 {
     public class CRM
     {
-        private readonly IApplicationDbContext _applicationDbContext;
-        private readonly IJsonConfigurationBuilder jsonConfigurationBuilder;
+        private readonly ICustomerRepository _customerRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CRM(IJsonConfigurationBuilder jsonConfigurationBuilder, IApplicationDbContext applicationDbContext)
+        public CRM(ICustomerRepository customerRepository, IUnitOfWork unitOfWork)
         {
-            _applicationDbContext = applicationDbContext; //new ApplicationDbContext(jsonConfigurationBuilder.GetConnectionString());
-
-            this.jsonConfigurationBuilder = jsonConfigurationBuilder;
+            _customerRepository = customerRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public IEnumerable<CustomerViewModel> GetCustomers()
         {
-            var result = from cus in _applicationDbContext.Customers
+            var result = from cus in _customerRepository.GetAllCustomers()
                          select new CustomerViewModel()
                          {
                              CustomerId = cus.CustomerId,
@@ -36,6 +36,38 @@ namespace MingChi.CRMApplication.CRMs
                              Phone = cus.Phone
                          };
 
+            return result;
+        }
+
+        public int AddCustomer(CustomerViewModel customer)
+        {
+            int result = 0;
+            try
+            {
+                _customerRepository.Add(new Customer()
+                {
+                    CustomerId = customer.CustomerId,
+                    ContactName = customer.ContactName,
+                    ContactTitle = customer.ContactTitle,
+                    CompanyName = customer.CompanyName,
+                    Country = customer.Country,
+                    PostalCode = customer.PostalCode,
+                    Address = customer.Address,
+                    City = customer.City,
+                    Phone = customer.Phone,
+                    Region = customer.Region,
+                    Fax = customer.Fax
+                });
+                result = _unitOfWork.Commit();
+            }
+            catch(Exception ex)
+            {
+                // Write Log
+
+                // Or throw the exception
+                throw ex;
+
+            }
             return result;
         }
     }

@@ -11,5 +11,7 @@ namespace MingChi.CRMApplication
     public interface IApplicationDbContext
     {
         DbSet<Customer> Customers { get; set; }
+
+        int SaveChange();
     }
 }

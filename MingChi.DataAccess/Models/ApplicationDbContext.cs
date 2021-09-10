@@ -10,20 +10,25 @@ namespace MingChi.DataAccess.Models
 {
     public class ApplicationDbContext: NorthwindContext, IApplicationDbContext
     {
-        private readonly string _connectionString;
+        //private readonly string _connectionString;
 
-        public ApplicationDbContext(string connectionString)
+        //public ApplicationDbContext(string connectionString)
+        //{
+        //    _connectionString = connectionString;
+        //}
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    if (!optionsBuilder.IsConfigured)
+        //    {
+        //        optionsBuilder.UseSqlServer(
+        //            _connectionString);
+        //    }
+        //}
+
+        public int SaveChange()
         {
-            _connectionString = connectionString;
+            return base.SaveChanges();
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer(
-                    _connectionString);
-            }
-        }
     }
 }
