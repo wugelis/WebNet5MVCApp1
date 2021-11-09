@@ -4,4 +4,9 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MingChi.CRMApplication\MingChi.CRMApplication.csproj" />
+    <ProjectReference Include="..\MingChi.DataAccess\MingChi.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
